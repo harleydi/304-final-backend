@@ -14,9 +14,13 @@ const userSchema = new mongoose.Schema({
         type: String, 
         unique: true 
     },
+    img: {
+        type: String,
+        default: 'avatar.jpg'
+    },
     cases: {
         type: Array,
-        ref: 'Case',
+        ref: 'User',
         default: []
     }
 })

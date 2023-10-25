@@ -25,9 +25,21 @@ const caseSchema = new mongoose.Schema({
         type: String,
         default: 'general'
     },
-    statements: {
+    plaintiffStatements: {
         type: Object,
-        default: {}
+        default: {
+            "opening": "",
+            "argument": "",
+            "closing": ""
+        }
+    },
+    defendantStatements: {
+        type: Object,
+        default: {
+            "opening": "",
+            "argument": "",
+            "closing": ""
+        }
     },
     plaintiffEvidence: {
         type: Array,

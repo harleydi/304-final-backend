@@ -1,5 +1,5 @@
 var express = require('express');
-const { createCase, getAll } = require('./controller/caseController');
+const { createCase, getAll, updateCase } = require('./controller/caseController');
 const { jwtValidate } = require('../../utils/jwtValidate');
 var router = express.Router();
 
@@ -10,5 +10,6 @@ router.get('/', function(req, res, next) {
 
 router.post('/create', jwtValidate, createCase)
 router.get('/all', getAll)
+router.put('/update/:id', updateCase)
 
 module.exports = router;

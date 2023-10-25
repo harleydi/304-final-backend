@@ -12,9 +12,11 @@ const register = async (req, res) => {
             lastname: req.body.lastname,
             email: req.body.email,
             password: hashedPassword,
-            username: req.body.username
+            username: req.body.username,
+            // img: req.body.img
         })
         let savedUser = await newUser.save()
+        await savedUser.populate('cases')
 
         res.status(200).json({ success: true, message: "User Created", user: savedUser })
     } catch (error) {
@@ -46,7 +48,7 @@ const login = async (req, res) => {
             id: foundUser._id
         }
 
-        let token = await jwt.sign(payload, process.env.SUPER_SECERT_KEY, { expiresIn: 60*5 })
+        let token = await jwt.sign(payload, process.env.SUPER_SECERT_KEY, { expiresIn: 60*60 })
         
         res.status(201).json({ success: true, token: token })
     } catch (error) {
@@ -73,5 +75,35 @@ const validateUser = async (req, res) => {
     }
 }
 
+const getUserInfo = async (req, res) => {
+    try {
+        const { id } = req.params
+        console.log(id)
+        const foundUser = await User.findOne({ _id: id })
 
-module.exports = { register, login, validateUser }
+        if (!foundUser) {
+            res.status(500).json({ message: 'User Not Found!', error: error.message})
+        }
+
+        const { username, email, cases } = foundUser
+
+        res.status(200).json({ success: true, data: {
+            username,
+            email,
+            cases
+        } })
+    } catch (error) {
+        res.status(500).json({ message: 'Error getting User', error: error.message})
+    }
+}
+
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find({})
+        res.status(200).json({ success: true, data: users })
+    } catch (error) {
+        res.status(500).json({ message: 'Error getting Users', error: error.message})
+    }
+}
+
+module.exports = { register, login, validateUser, getUserInfo, getAllUsers }
