@@ -4,7 +4,7 @@ const Case = require('../model/Case')
 
 const createCase = async (req, res) => {
     try {
-        const { caseName, defendant, summary } = req.body
+        const { caseName, defendant, plaintiffEvidence, summary } = req.body
         let id = res.locals.decodedToken.id
         console.log(id)
         let user = await User.findById({ _id: id })
@@ -12,20 +12,23 @@ const createCase = async (req, res) => {
             res.status(500).json({ success: false, message: 'User not found!'})
         }
 
-        let userBiD = req.body.defendant
-        let userB = await User.findById({ _id: userBiD })
+        
+        let userB = await User.findById({ _id: defendant })
         if (!userB) {
             res.status(500).json({ success: false, message: 'UserB not found!'})
         }
 
-        let caseData = {
-            caseName,
-            plaintiff: user,
-            defendant: userB,
-            summary
-        }
-        let newCase = await new Case(caseData)
+        // let caseData = {
+        //     caseName,
+        //     plaintiff: user,
+        //     defendant: userB,
+        //     plaintiffEvidence,
+        //     summary
+        // }
+        // console.log(caseData)
+        let newCase = await new Case(req.body)
         const savedCase = await newCase.save()
+        console.log(savedCase)
 
         let saveToUser = await User.findOneAndUpdate({ _id: user }, { $push : { cases: newCase._id }})
         await saveToUser.save()

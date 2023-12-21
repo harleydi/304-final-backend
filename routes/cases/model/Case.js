@@ -1,6 +1,13 @@
 const mongoose = require('mongoose')
 const { v4: uuid } = require('uuid')
 
+const subSchema = new mongoose.Schema({
+    type: String,
+    source: String,
+    description: String,
+    argumentPhase: String
+})
+
 
 const caseSchema = new mongoose.Schema({
     _id: {
@@ -14,7 +21,11 @@ const caseSchema = new mongoose.Schema({
         type: String,
         ref: 'User'
     },
-    defendant: String,
+    defendant: {
+        type: String,
+        ref: 'user'
+        
+    },
     summary: String,
     caseStatus: {
         type: String,
@@ -41,10 +52,7 @@ const caseSchema = new mongoose.Schema({
             "closing": ""
         }
     },
-    plaintiffEvidence: {
-        type: Array,
-        default: []
-    },
+    plaintiffEvidence: [subSchema],
     defendantEvidence: {
         type: Array,
         default: []
