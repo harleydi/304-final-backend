@@ -7,11 +7,12 @@ const cors = require('cors')
 require('dotenv').config()
 
 const mongoose = require('mongoose')
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, {useUnifiedTopology: true, useNewUrlParser: true})
   .then(() => console.log('Connected to MongoDB !!!'))
   .catch((err) => console.log(err))
 
 
+mongoose.set('bufferCommands', false)
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users/users');
@@ -23,9 +24,12 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+
 app.use(cors({
   origin: process.env.CORS_ORIGIN
 }))
+
+// app.use(cors())
 
 app.use(logger('dev'));
 app.use(express.json());
