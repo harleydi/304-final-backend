@@ -7,8 +7,9 @@ const cors = require('cors')
 require('dotenv').config()
 
 const mongoose = require('mongoose')
-mongoose.connect(process.env.MONGODB_URI, {useUnifiedTopology: true, useNewUrlParser: true})
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB !!!'))
+  .then(() => console.log(`Mongo running pn port: ${process.env.PORT}`))
   .catch((err) => console.log(err))
 
 
@@ -26,7 +27,9 @@ app.set('view engine', 'ejs');
 
 
 app.use(cors({
-  origin: process.env.CORS_ORIGIN
+  origin: process.env.CORS_ORIGIN,
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
 }))
 
 // app.use(cors())

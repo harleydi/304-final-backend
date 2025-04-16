@@ -42,10 +42,14 @@ const createCase = async (req, res) => {
 const getAll = async (req, res) => {
     try {
         const cases = await Case.find({})
+        
+        if (!cases || cases.length === 0) {
+            res.status(500).json({ success: false, message: 'No cases Found'})
+        }
 
         res.status(200).json({ success: true, data: cases })
     } catch (error) {
-        res.status(500).json({ success: false, error: error})
+        res.status(500).json({ success: false, error: error.message})
     }
 }
 
