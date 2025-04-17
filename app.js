@@ -5,22 +5,21 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors')
 require('dotenv').config()
-
-const mongoose = require('mongoose')
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB !!!'))
-  .then(() => console.log(`Mongo running pn port: ${process.env.PORT}`))
-  .catch((err) => console.log(err))
+const connectDB = require('./config/db');
 
 
-mongoose.set('bufferCommands', false)
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users/users');
-const casesRouter = require('./routes/cases/cases')
+
+// mongoose.set('bufferCommands', false)
+
 
 var app = express();
 
+connectDB()
+
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users/users');
+const casesRouter = require('./routes/cases/cases');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
