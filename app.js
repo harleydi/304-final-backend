@@ -24,7 +24,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(cors({
-  origin: process.env.CORS_ORIGIN
+  origin: process.env.CORS_ORIGIN.split(" ")
 }))
 
 app.use(logger('dev'));
